@@ -134,7 +134,28 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     int volumePointNumber = readSingleIntInString(line);
     VolumePoints.resize(volumePointNumber);
     cout << "volume点的个数为:" << volumePointNumber << endl;
-
+    for (int i = 0; i < volumePointNumber; i++)
+    {
+        getline(inputVolumFile, line);
+        double num1, num2, num3;
+        // Point *tmpPoint = new Point;
+        Point tmpPoint;
+        std::istringstream iss(line);
+        if (iss >> num1 >> num2 >> num3)
+        {
+            // 将三个double添加到tmpPoint中
+            // cout << num1 << num2 << num3 << endl;
+            tmpPoint.index = i;
+            tmpPoint.x = num1;
+            tmpPoint.y = num2;
+            tmpPoint.z = num3;
+            VolumePoints[i] = tmpPoint;
+        }
+        else
+        {
+            std::cerr << "无法解析行：" << line << std::endl;
+        }
+    }
     inputVolumFile.close();
     // return true;
 }
