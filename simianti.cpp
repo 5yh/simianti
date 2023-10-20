@@ -118,7 +118,8 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     // 关闭文件,现在有surfacePoints存surface点，surfaceCells存surface三角形面片
     inputSurfaceFile.close();
     // --------------------------------------------------------------------------
-    vector<Point> VolumePoints;
+    vector<Point> volumePoints;
+    vector<Cell3D> volumeCells;
     inputVolumFile.open(volumFilePath);
     if (!inputVolumFile.is_open())
     {
@@ -132,7 +133,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     }
     getline(inputVolumFile, line);
     int volumePointNumber = readSingleIntInString(line);
-    VolumePoints.resize(volumePointNumber);
+    volumePoints.resize(volumePointNumber);
     cout << "volume点的个数为:" << volumePointNumber << endl;
     for (int i = 0; i < volumePointNumber; i++)
     {
@@ -149,12 +150,22 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             tmpPoint.x = num1;
             tmpPoint.y = num2;
             tmpPoint.z = num3;
-            VolumePoints[i] = tmpPoint;
+            volumePoints[i] = tmpPoint;
         }
         else
         {
             std::cerr << "无法解析行：" << line << std::endl;
         }
+    }
+
+    // 读取volumeFile四面体个数
+
+    getline(inputVolumFile, line);
+    int volumeCellNumber = readSingleIntInString(line);
+    cout << "volumeCellNumber为：" << volumeCellNumber << endl;
+    volumeCells.resize(volumeCellNumber);
+    for (int i = 0; i < volumeCellNumber; i++)
+    {
     }
     inputVolumFile.close();
     // return true;
