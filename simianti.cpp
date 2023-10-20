@@ -56,12 +56,12 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
 
     // 读取surfaceFile点的个数
     getline(inputSurfaceFile, line);
-    int pointNumber = readSingleIntInString(line);
-    surfacePoints.resize(pointNumber);
-    cout << "surface点的个数为:" << pointNumber << endl;
+    int SurfacePointNumber = readSingleIntInString(line);
+    surfacePoints.resize(SurfacePointNumber);
+    cout << "surface点的个数为:" << SurfacePointNumber << endl;
 
     // 将surface点添加到surfacePoints中
-    for (int i = 0; i < pointNumber; i++)
+    for (int i = 0; i < SurfacePointNumber; i++)
     {
         getline(inputSurfaceFile, line);
         double num1, num2, num3;
@@ -115,15 +115,25 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     }
     cout << surfaceCells[485100].indexPoint1 << endl;
     // 274559 759684
-    // 关闭文件
+    // 关闭文件,现在有surfacePoints存surface点，surfaceCells存surface三角形面片
     inputSurfaceFile.close();
-
+    // --------------------------------------------------------------------------
+    vector<Point> VolumePoints;
     inputVolumFile.open(volumFilePath);
     if (!inputVolumFile.is_open())
     {
         cerr << "cant open volume file" << endl;
         exit(1);
     }
+    // 逐行读取前四行，丢弃
+    for (int i = 0; i < 4; i++)
+    {
+        getline(inputVolumFile, line);
+    }
+    getline(inputVolumFile, line);
+    int volumePointNumber = readSingleIntInString(line);
+    VolumePoints.resize(volumePointNumber);
+    cout << "volume点的个数为:" << volumePointNumber << endl;
 
     inputVolumFile.close();
     // return true;
