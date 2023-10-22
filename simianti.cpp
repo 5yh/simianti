@@ -166,6 +166,26 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     volumeCells.resize(volumeCellNumber);
     for (int i = 0; i < volumeCellNumber; i++)
     {
+        getline(inputVolumFile, line);
+        int num1, num2, num3, num4;
+        // Point *tmpPoint = new Point;
+        Cell3D tmpCell3D;
+        std::istringstream iss(line);
+        if (iss >> num1 >> num2 >> num3 >> num4)
+        {
+            // 将4个double添加到tmpPoint中
+            // cout << num1 << num2 << num3 << endl;
+            if (num1 == 3)
+                continue;
+            if (num2 > SurfacePointNumber || num3 > SurfacePointNumber || num4 > SurfacePointNumber)
+                continue;
+            tmpCell3D.indexPoint1 = num1;
+            tmpCell3D.indexPoint1 = num2;
+            tmpCell3D.indexPoint1 = num3;
+            tmpCell3D.indexPoint1 = num4;
+            volumeCells[i] = tmpCell3D;
+            cout << num1 << ' ' << num2 << ' ' << num3 << ' ' << num4 << endl;
+        }
     }
     inputVolumFile.close();
     // return true;
