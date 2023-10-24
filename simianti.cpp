@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 int inline max3(int num1, int num2, int num3)
 {
@@ -12,7 +13,10 @@ int inline min3(int num1, int num2, int num3)
 {
     return (num1 > num2) ? ((num1 > num3) ? num3 : num1) : ((num2 > num3) ? num3 : num2);
 }
-
+bool compareDescending(int a, int b)
+{
+    return a > b;
+}
 struct Point
 {
     int index;
@@ -92,7 +96,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             std::cerr << "无法解析行：" << line << std::endl;
         }
     }
-    cout << surfacePoints[274353].x << endl;
+    cout << surfacePoints[240000].x << endl;
 
     // 读取surfaceFile三角面片个数
     getline(inputSurfaceFile, line);
@@ -124,7 +128,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             std::cerr << "cant parse line：" << line << std::endl;
         }
     }
-    cout << surfaceCells[485100].indexPoint1 << endl;
+    cout << surfaceCells[484000].indexPoint1 << endl;
     // 274559 759684
     // 关闭文件,现在有surfacePoints存surface点，surfaceCells存surface三角形面片
     inputSurfaceFile.close();
@@ -179,29 +183,53 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     for (int i = 0; i < volumeCellNumber; i++)
     {
         getline(inputVolumFile, line);
-        int num1, num2, num3, num4;
+        int num1, num2, num3, num4, num5;
         // Point *tmpPoint = new Point;
         Cell3D tmpCell3D;
         std::istringstream iss(line);
-        if (iss >> num1 >> num2 >> num3 >> num4)
+        if (iss >> num1 >> num2 >> num3 >> num4 >> num5)
         {
             // 将4个double添加到tmpPoint中
             // cout << num1 << num2 << num3 << endl;
             if (num1 == 3)
                 continue;
-            if (num2 > SurfacePointNumber || num3 > SurfacePointNumber || num4 > SurfacePointNumber)
+            if (num2 > SurfacePointNumber || num3 > SurfacePointNumber || num4 > SurfacePointNumber || num5 > SurfacePointNumber)
                 continue;
-            // tmpCell3D.indexPoint1 = num1;
             tmpCell3D.indexPoint1 = num2;
             tmpCell3D.indexPoint2 = num3;
             tmpCell3D.indexPoint3 = num4;
+            tmpCell3D.indexPoint4 = num5;
             volumeCells[j++] = tmpCell3D;
         }
     }
     cout << "存入的四面体个数为:" << j << endl;
-    for (int i = 0; i < j; i++)
+
+    vector<Cell2D> volumeCells3DTo2D(j * 4);
+    vector<int> tmpnums(4);
+    for (int i = 0, k = 0; i < j; i++)
     {
+        tmpnums[0] = volumeCells[i].indexPoint1;
+        tmpnums[1] = volumeCells[i].indexPoint2;
+        tmpnums[2] = volumeCells[i].indexPoint3;
+        tmpnums[3] = volumeCells[i].indexPoint4;
+        sort(tmpnums.begin(), tmpnums.end(), compareDescending);
+        volumeCells3DTo2D[k].indexPoint1 = tmpnums[0];
+        volumeCells3DTo2D[k].indexPoint2 = tmpnums[1];
+        volumeCells3DTo2D[k++].indexPoint3 = tmpnums[2];
+
+        volumeCells3DTo2D[k].indexPoint1 = tmpnums[0];
+        volumeCells3DTo2D[k].indexPoint2 = tmpnums[1];
+        volumeCells3DTo2D[k++].indexPoint3 = tmpnums[3];
+
+        volumeCells3DTo2D[k].indexPoint1 = tmpnums[0];
+        volumeCells3DTo2D[k].indexPoint2 = tmpnums[2];
+        volumeCells3DTo2D[k++].indexPoint3 = tmpnums[3];
+
+        volumeCells3DTo2D[k].indexPoint1 = tmpnums[1];
+        volumeCells3DTo2D[k].indexPoint2 = tmpnums[2];
+        volumeCells3DTo2D[k++].indexPoint3 = tmpnums[3];
     }
+    cout << "将四面体四个面分别存入volumeCells3DTo2D中" << endl;
     inputVolumFile.close();
     // return true;
 }
