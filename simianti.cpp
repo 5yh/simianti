@@ -12,6 +12,7 @@ int inline min3(int num1, int num2, int num3)
 {
     return (num1 > num2) ? ((num1 > num3) ? num3 : num1) : ((num2 > num3) ? num3 : num2);
 }
+
 struct Point
 {
     int index;
@@ -111,10 +112,11 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
         {
             // 将三个int添加到tmpPoint中
             int maxx = max3(num1, num2, num3);
-
-            tmpCell.indexPoint1 = num1;
-            tmpCell.indexPoint2 = num2;
-            tmpCell.indexPoint3 = num3;
+            int minn = min3(num1, num2, num3);
+            int midd = num1 + num2 + num3 - maxx - minn;
+            tmpCell.indexPoint1 = minn;
+            tmpCell.indexPoint2 = midd;
+            tmpCell.indexPoint3 = maxx;
             surfaceCells[i] = tmpCell;
         }
         else
