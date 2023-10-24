@@ -22,6 +22,10 @@ struct Point
 struct Cell2D
 {
     int indexPoint1, indexPoint2, indexPoint3;
+    bool operator==(const Cell2D &other) const
+    {
+        return (indexPoint1 == other.indexPoint1) && (indexPoint2 == other.indexPoint2) && (indexPoint3 == other.indexPoint3);
+    }
 };
 struct Cell3D
 {
@@ -276,7 +280,9 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     // {
     //     cout << surfaceCells[i].indexPoint1 << ' ' << surfaceCells[i].indexPoint2 << ' ' << surfaceCells[i].indexPoint3 << endl;
     // }
-
+    for (int ii = 0, jj = 0; ii < surfaceCellNumber; ii++)
+    {
+    }
     inputVolumFile.close();
     // return true;
 }
