@@ -117,7 +117,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             std::cerr << "无法解析行：" << line << std::endl;
         }
     }
-    cout << surfacePoints[240000].x << endl;
+    // cout << surfacePoints[240000].x << endl;
 
     // 读取surfaceFile三角面片个数
     getline(inputSurfaceFile, line);
@@ -150,7 +150,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             std::cerr << "cant parse line：" << line << std::endl;
         }
     }
-    cout << surfaceCells[484000].indexPoint1 << endl;
+    // cout << surfaceCells[484000].indexPoint1 << endl;
     // 274559 759684
     // 关闭文件,现在有surfacePoints存surface点，surfaceCells存surface三角形面片
     inputSurfaceFile.close();
@@ -273,15 +273,38 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     cout << "surfaceCells降序排序,大小为" << surfaceCells.size() << endl;
     // for (int i = 0; i < 100; i++)
     // {
-    //     cout << volumeCells3DTo2D[i].indexPoint1 << ' ' << volumeCells3DTo2D[i].indexPoint2 << ' ' << volumeCells3DTo2D[i].indexPoint3 << endl;
+    //     cout << i << ' ' << volumeCells3DTo2D[i].indexPoint1 << ' ' << volumeCells3DTo2D[i].indexPoint2 << ' ' << volumeCells3DTo2D[i].indexPoint3 << endl;
     // }
     // cout << "---------------------------------------------------" << endl;
     // for (int i = 0; i < 100; i++)
     // {
-    //     cout << surfaceCells[i].indexPoint1 << ' ' << surfaceCells[i].indexPoint2 << ' ' << surfaceCells[i].indexPoint3 << endl;
+    //     cout << i << ' ' << surfaceCells[i].indexPoint1 << ' ' << surfaceCells[i].indexPoint2 << ' ' << surfaceCells[i].indexPoint3 << endl;
     // }
-    for (int ii = 0, jj = 0; ii < surfaceCellNumber; ii++)
+    int ii = 0, jj = 0;
+    while (jj < volumeCells3DTo2D.size())
     {
+        if (surfaceCells[ii] == volumeCells3DTo2D[jj])
+        {
+            ii++, jj++;
+            continue;
+        }
+        else
+        {
+            jj++;
+        }
+    }
+    if (ii != surfaceCells.size())
+    {
+        cout << "有不在volume的三角形" << endl;
+        // 38 242435 242430 228182
+        cout << "不在volume中的序号为:" << ii << endl;
+        return false;
+    }
+    else
+    {
+        cout << "所有三角形都在volume中" << endl;
+        cout << ii;
+        return true;
     }
     inputVolumFile.close();
     // return true;
