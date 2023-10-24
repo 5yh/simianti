@@ -4,6 +4,14 @@
 #include <string>
 #include <sstream>
 using namespace std;
+int inline max3(int num1, int num2, int num3)
+{
+    return (num1 > num2) ? ((num1 > num3) ? num1 : num3) : ((num2 > num3) ? num2 : num3);
+}
+int inline min3(int num1, int num2, int num3)
+{
+    return (num1 > num2) ? ((num1 > num3) ? num3 : num1) : ((num2 > num3) ? num3 : num2);
+}
 struct Point
 {
     int index;
@@ -102,7 +110,8 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
         if (iss >> num1 >> num2 >> num3)
         {
             // 将三个int添加到tmpPoint中
-            // cout << num1 << num2 << num3 << endl;
+            int maxx = max3(num1, num2, num3);
+
             tmpCell.indexPoint1 = num1;
             tmpCell.indexPoint2 = num2;
             tmpCell.indexPoint3 = num3;
@@ -164,6 +173,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
     int volumeCellNumber = readSingleIntInString(line);
     cout << "volumeCellNumber为：" << volumeCellNumber << endl;
     volumeCells.resize(volumeCellNumber);
+    int j = 0;
     for (int i = 0; i < volumeCellNumber; i++)
     {
         getline(inputVolumFile, line);
@@ -179,13 +189,16 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
                 continue;
             if (num2 > SurfacePointNumber || num3 > SurfacePointNumber || num4 > SurfacePointNumber)
                 continue;
-            tmpCell3D.indexPoint1 = num1;
+            // tmpCell3D.indexPoint1 = num1;
             tmpCell3D.indexPoint1 = num2;
-            tmpCell3D.indexPoint1 = num3;
-            tmpCell3D.indexPoint1 = num4;
-            volumeCells[i] = tmpCell3D;
-            cout << num1 << ' ' << num2 << ' ' << num3 << ' ' << num4 << endl;
+            tmpCell3D.indexPoint2 = num3;
+            tmpCell3D.indexPoint3 = num4;
+            volumeCells[j++] = tmpCell3D;
         }
+    }
+    cout << "存入的四面体个数为:" << j << endl;
+    for (int i = 0; i < j; i++)
+    {
     }
     inputVolumFile.close();
     // return true;
