@@ -11,7 +11,7 @@ int inline max3(int num1, int num2, int num3)
 }
 int inline min3(int num1, int num2, int num3)
 {
-    return (num1 > num2) ? ((num1 > num3) ? num3 : num1) : ((num2 > num3) ? num3 : num2);
+    return (num1 < num2) ? ((num1 < num3) ? num1 : num3) : ((num2 < num3) ? num2 : num3);
 }
 
 struct Point
@@ -138,6 +138,7 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             tmpCell.indexPoint1 = maxx;
             tmpCell.indexPoint2 = midd;
             tmpCell.indexPoint3 = minn;
+            // cout<<maxx<<' '<<midd<<' '<<minn<<endl;
             surfaceCells[i] = tmpCell;
         }
         else
@@ -225,7 +226,8 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
 
     vector<Cell2D> volumeCells3DTo2D(j * 4);
     vector<int> tmpnums(4);
-    for (int i = 0, k = 0; i < j; i++)
+    int k = 0;
+    for (int i = 0; i < j; i++)
     {
         tmpnums[0] = volumeCells[i].indexPoint1;
         tmpnums[1] = volumeCells[i].indexPoint2;
@@ -258,22 +260,23 @@ bool check_Steiner(std::string surfaceFilePath, std::string volumFilePath)
             volumeCells3DTo2D[k++].indexPoint3 = tmpnums[3];
         }
     }
-    cout << "将四面体四个面分别存入volumeCells3DTo2D中" << endl;
-
+    cout << "将四面体四个面分别存入volumeCells3DTo2D中，个数为：" << k << endl;
+    volumeCells3DTo2D.resize(k);
     // 这里有bug，存的时候因为筛除了一些，所以这里vector长度大于实际存的，排序爆了
     sort(volumeCells3DTo2D.begin(), volumeCells3DTo2D.end(), compareCell2dDescending);
     cout << "volumeCells3DTo2D降序排序,大小为" << volumeCells3DTo2D.size() << endl;
     sort(surfaceCells.begin(), surfaceCells.end(), compareCell2dDescending);
     cout << "surfaceCells降序排序,大小为" << surfaceCells.size() << endl;
-    for (int i = 0; i < 100; i++)
-    {
-        cout << volumeCells3DTo2D[i].indexPoint1 << ' ' << volumeCells3DTo2D[i].indexPoint2 << ' ' << volumeCells3DTo2D[i].indexPoint3 << endl;
-    }
-    cout << "---------------------------------------------------" << endl;
-    for (int i = 0; i < 100; i++)
-    {
-        cout << surfaceCells[i].indexPoint1 << ' ' << surfaceCells[i].indexPoint2 << ' ' << surfaceCells[i].indexPoint3 << endl;
-    }
+    // for (int i = 0; i < 100; i++)
+    // {
+    //     cout << volumeCells3DTo2D[i].indexPoint1 << ' ' << volumeCells3DTo2D[i].indexPoint2 << ' ' << volumeCells3DTo2D[i].indexPoint3 << endl;
+    // }
+    // cout << "---------------------------------------------------" << endl;
+    // for (int i = 0; i < 100; i++)
+    // {
+    //     cout << surfaceCells[i].indexPoint1 << ' ' << surfaceCells[i].indexPoint2 << ' ' << surfaceCells[i].indexPoint3 << endl;
+    // }
+
     inputVolumFile.close();
     // return true;
 }
